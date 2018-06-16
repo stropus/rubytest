@@ -6,34 +6,51 @@ y  = ARGV[2].to_i
 month = %w[января февраля марта апреля мая июня июля августа сентября октября ноября декабря]
 month30 = %w[апреля июня сентября ноября]
 
-#Прекращаем выполнение программы, если аргумент "День" не лежит в пределах от 1 до 31
-abort "Аргумент ДЕНЬ: '#{d}' не находится в допустимых пределах от 1 до 31" if d < 1 || d > 31
-
-#Прекращаем выполнение программы, если аргумент "Год" не лежит в пределах от 1 до 2999
-abort "Аргумент ГОД: '#{y}' не находится в допустимых пределах от 1 до 2999" if y < 1 || y > 2999
-
-#Проверяем, аргумент - месяц должен находиться в допустимом массиве месяцов month
-abort "Аргумент МЕСЯЦ: '#{m}' содержит недопустимый набор символов!" if !month.detect{|e| e==m}
-
-#Проверяем, соответствие пары аргументов "день - месяц"  в допустимых пределах дней
-abort "Аргумент МЕСЯЦ: '#{m}' не может иметь аргумент ДЕНЬ равный #{d}!" if month30.detect{|e| e == m} && d == 31
-#И по февралю
-#Високосный год?
-if y % 100 == 0 && y % 400 == 0 then
-    dFeb = 29
-    num_d = 366
-elsif y % 100 == 0 && y % 400 != 0 then
-    dFeb = 28
-    num_d = 365
-elsif y % 4 == 0 then
-    dFeb = 29
-    num_d = 366
-else
-    dFeb = 28
-    num_d = 365
+# Определяем вискосность года и количество дней в нем
+def visokosn (y1)
+    if y1 % 100 == 0 && y1 % 400 == 0 then
+        return [29,366]
+    elsif y1 % 100 == 0 && y1 % 400 != 0 then
+        return [28,365]
+    elsif y1 % 4 == 0 then
+        return [29,366]
+    else
+        return [28,365]
+    end
 end
-abort "Аргумент МЕСЯЦ: '#{m}' не может иметь аргумент ДЕНЬ равный #{d}!!" if m == "февраля" && d > dFeb
 
-t = Time.mktime(y,month.index(m)+1,d)
-day = t.yday
-puts num_d - day
+def raschet(y2, m2, d2, nd, mm)
+    t = Time.mktime(y2,mm.index(m2)+1,d2)
+    day = t.yday
+    puts nd - day
+end
+
+
+if d >= 1 and d <= 31 then
+    if y >= 1 and y <= 2999  then
+        rez = visokosn(y)
+        if month.detect{|e| e == m} then
+            if month30.detect{|e| e == m} then
+                if d <= 30 then
+                    raschet(y,m,d,rez[1],month)
+                else
+                    puts "error day in month"
+                end
+            elsif m == "февраля" then
+                if d <= rez[0] then
+                    raschet(y,m,d,rez[1],month)
+                else
+                    puts "error feb days"
+                end
+            else
+                raschet(y,m,d,rez[1],month)
+            end
+        else
+            puts "error in month"
+        end
+    else
+        puts "error in year"
+    end
+else
+    puts "error in day"
+end
