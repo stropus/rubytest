@@ -5,66 +5,67 @@ to   = ARGV[2].to_i
 # Допустимый алфавит символов для систем счисления
 scale = "0123456789abcdefghijklmnopqrstuvwxyz"
 
+def test_arg (alf,nn1,st,en)
+    i = 0
+    flag1 = true
+    while i < nn1.length do
+        flag1 = flag1 && alf[st,en].include?(nn1[i])
+        i += 1
+    end
+    return flag1
+end
+
+def perevod (num, scale, from, to)
+    p = 0
+    i = 0
+    while i < num.length do
+        p = p * from + scale.index(num[i])
+        i += 1
+    end
+    k = 99
+    l = 0
+    j = 0
+    buf = Array.new(100)
+    while (1) do
+        j = p % to
+        buf[k] = scale[j]
+        k -= 1
+        l += 1
+        p = p / to
+        break if p == 0
+    end
+    rezult = buf.join("")
+    return rezult.to_i
+end
+
 #Проверяем, чтобы первый аргумент - число в некой системе счисления содержал только символы из набора scale
-i = 0
-flag1 = true
-while i < num.length do
-    flag1 = flag1 && scale.include?(num[i])
-    i += 1
-end
-abort "#{num} - Первый аргумент содержит недопустимый набор символов!" if !flag1
-
+fl1 = test_arg(scale,num,0,36)
 #Проверяем, чтобы первый аргумент - число в некой системе счисления содержал только символы из набора для данной системы счисления
-i = 0
-flag2 = true
-while i < num.length do
-    flag2 = flag2 && scale[0,from].include?(num[i])
-    i += 1
+fl2 = test_arg(scale,num,0,from)
+n10 = perevod(num, scale, from, 10)
+
+if fl1 && fl2 then
+    if n10 >= 0 and n10 <= 10000 then
+        if from >= 2 and to <= 36 then
+            if to >= 2 then
+                if from == to then # системы счисления одинаковы
+                    puts num
+                elsif n10 == 0 # 0 в любой системе счисления 0
+                    puts num
+                else
+                    # считаем
+                    rezult = perevod(num, scale, from, to)
+                    puts rezult
+                end
+            else
+                puts "error: base number #{to} does not exist or there are not enough arguments on the command line"
+            end
+        else
+            puts "error of the number system: number system or less than 2 or more 36."
+        end
+    else
+        puts "error in arg1: 10000 < arg1 < 0."
+    end
+else
+    puts "error in arg1. arg1 is outside the specified range."
 end
-abort "#{num} - Первый аргумент содержит недопустимый набор символов для системы счисления #{from}" if !flag2
-
-#Прекращаем выполнение программы, если первый аргумент < 0
-abort "Первый аргумент #{num} < 0" if num.to_i < 0
-
-#Прекращаем выполнение программы, если первый аргумент > 10000
-abort "Первый аргумент #{num} > 10000" if num.to_i > 10000
-
-#Прекращаем выполнение программы, если система счисления ИЗ меньше 2
-abort "Исходная система счисления #{from} < 2: - недопустимый параметр. " if from < 2
-
-#Прекращаем выполнение программы, если система счисления В больше 36
-abort "Конечная система счисления #{to} > 36:  - недопустимый параметр. " if to > 36
-
-#Прекращаем выполнение программы, если параметров всего 2
-abort "Недостаточно параметров в командной строке. " if to == 0
-
-#Прекращаем выполнение программы, если исходная и конечная системы счисления равны
-abort "#{num}" if from == to
-
-#Прекращаем выполнение программы, 0 в любой системе счисления 0
-abort "#{num}" if num.length==1 && scale[0,1].include?(num[0])
-
-p = 0
-i = 0
-while i < num.length do
-    p = p * from + scale.index(num[i])
-    i += 1
-end
-
-k = 99
-l = 0
-j = 0
-
-buf = Array.new(100)
-
-while (1) do
-    j = p % to
-    buf[k] = scale[j]
-    k -= 1
-    l += 1
-    p = p / to
-    break if p == 0
-end
-
-rezult = buf.join("")
-puts rezult
