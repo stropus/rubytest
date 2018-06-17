@@ -33,24 +33,14 @@ if d >= 1 and d <= 31 then
             if month30.detect{|e| e == m} then
                 if d <= 30 then
                     raschet(y,m,d,rez[1],month)
-                else
-                    puts "error day in month"
                 end
             elsif m == "февраля" then
                 if d <= rez[0] then
                     raschet(y,m,d,rez[1],month)
-                else
-                    puts "error feb days"
                 end
             else
                 raschet(y,m,d,rez[1],month)
             end
-        else
-            puts "error in month"
         end
-    else
-        puts "error in year"
     end
-else
-    puts "error in day"
 end
