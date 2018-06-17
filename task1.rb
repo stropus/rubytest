@@ -57,15 +57,7 @@ if fl1 && fl2 then
                     rezult = perevod(num, scale, from, to)
                     puts rezult
                 end
-            else
-                puts "error: base number #{to} does not exist or there are not enough arguments on the command line"
             end
-        else
-            puts "error of the number system: number system or less than 2 or more 36."
         end
-    else
-        puts "error in arg1: 10000 < arg1 < 0."
     end
-else
-    puts "error in arg1. arg1 is outside the specified range."
 end
