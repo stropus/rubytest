@@ -35,14 +35,14 @@ def perevod (num, scale, from, to)
         break if p == 0
     end
     rezult = buf.join("")
-    return rezult.to_i
+    return rezult
 end
 
 #Проверяем, чтобы первый аргумент - число в некой системе счисления содержал только символы из набора scale
 fl1 = test_arg(scale,num,0,36)
 #Проверяем, чтобы первый аргумент - число в некой системе счисления содержал только символы из набора для данной системы счисления
 fl2 = test_arg(scale,num,0,from)
-n10 = perevod(num, scale, from, 10)
+n10 = perevod(num, scale, from, 10).to_i
 
 if fl1 && fl2 then
     if n10 >= 0 and n10 <= 10000 then
