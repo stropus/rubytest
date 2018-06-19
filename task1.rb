@@ -42,9 +42,9 @@ end
 fl1 = test_arg(scale,num,0,36)
 #Проверяем, чтобы первый аргумент - число в некой системе счисления содержал только символы из набора для данной системы счисления
 fl2 = test_arg(scale,num,0,from)
-n10 = perevod(num, scale, from, 10).to_i
 
 if fl1 && fl2 then
+    n10 = perevod(num, scale, from, 10).to_i
     if n10 >= 0 and n10 <= 10000 then
         if from >= 2 and to <= 36 then
             if to >= 2 then
